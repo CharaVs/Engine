@@ -1,49 +1,48 @@
-#define SOL_ALL_SAFETIES_ON 1
 #include "raylib.h"
 
 #include "../include/2DRenderer.hpp"
 #include "../include/MM.hpp"
 #include "../include/dataStructures.hpp"
 #include <algorithm>
-#include "../include/Properties.hpp"
+#include <unordered_map>
+#include <vector>
 #include <cstring>
-#include "C:/Users/krist/OneDrive/Desktop/Engine/include2/lua.hpp"
-Texture2D textures = {};
+#include "../include/lua_manager.hpp"
+
+
+std::vector<TextureType*> textures;
+std::vector<Tile*> tilesToRender;
+std::unordered_map<int, Tile*> tiles;
+std::vector<UIObject*> uiToRender;
+std::unordered_map<int, UIObject*> ui;
 
 Texture2D loadSTexture(const char* filePath) {
-    Image image = LoadImage(filePath);
-    Texture2D imageToTexture = LoadTextureFromImage(image);
-    UnloadImage(image);
-    return imageToTexture;
-};
-
-Property GetProperty(const char *name) {
-    if (strcmp(name, "position")) {
-        return POSITION;
+    for (auto& i : textures) {
+        if (strcmp(i->filePath, filePath) == 0) {
+            return i->texture;
+        };
     };
+    Image image = LoadImage(filePath);
+    TextureType* newTextureType = new TextureType();
+    newTextureType->texture = LoadTextureFromImage(image);
+    newTextureType->filePath = filePath;
+    textures.push_back(newTextureType);
+    UnloadImage(image);
+    return newTextureType->texture;
 };
 
-int newObject(lua_State* L) {
-
-};
 
 void InitializeGame(int width, int height, const char* title) {
     InitWindow(width, height, title);
 
-    std::vector<Tile*> tilesToRender;
-
     Texture2D wabbit_alpha = loadSTexture("resources/wabbit_alpha.png");
 
-    lua_State* L = luaL_newstate();
-
-    luaL_openlibs(L);
-
-    luaL_dofile(L, "src/main.lua");
 
     Player player;
-    player.playerImage = wabbit_alpha;
-    player.zIndex = 1;
+    player.image = wabbit_alpha;
+    player.zIndex = 2;
     player.position = (Vector2) {0,0};
+    player.opacity = 255;
 
     Camera2D camera = { 0 };
     camera.target = player.position;
@@ -52,61 +51,105 @@ void InitializeGame(int width, int height, const char* title) {
     camera.zoom = 1.0f;
 
     Tile* playerTile = new Tile();
+    playerTile->image = player.image;
+    playerTile->position = player.position;
+    playerTile->zIndex = player.zIndex;
+    playerTile->visible = true;
+    playerTile->id = 1;
 
 
     tilesToRender.push_back(playerTile);
+    tiles.emplace(playerTile->id, playerTile);
 
+    initLua(&player);
     while (!WindowShouldClose())
 	{
         // Sorts the z-index every frame (in case of new additions)
-        playerTile->tileImage = player.playerImage;
+        playerTile->image = player.image;
         playerTile->position = player.position;
         playerTile->zIndex = player.zIndex;
+        playerTile->opacity = player.opacity;
         sortZIndexArray(tilesToRender);
+        sortZIndexArrayUI(uiToRender);
         //camera.target = player.position;
-        if (IsKeyPressed(KEY_W)) {
-            player.position = AddTwoVectors(player.position, (Vector2) {50, 50});
-        };
+        doLua();
 		BeginDrawing();
             ClearBackground(WHITE);
             BeginMode2D(camera);
-                RenderTiles(&tilesToRender);
+                RenderTiles(tilesToRender);
+                RenderUI(uiToRender);
             EndMode2D();
 		EndDrawing();
 	};
-
-    lua_close(L);
+    closeLua();
+    FreeAllTextures();
 };
 
 // Sorts z-index array so that the order of which textures are drawn onto the screen are correct.
-void sortZIndexArray(std::vector<Tile*> array) {
+void sortZIndexArray(std::vector<Tile*>& array) {
     std::sort(array.begin(), array.end(), [](const Tile* a, const Tile* b) {
         return a->zIndex < b->zIndex;
     });
 };
 
+void sortZIndexArrayUI(std::vector<UIObject*>& array) {
+    std::sort(array.begin(), array.end(), [](const UIObject* a, const UIObject* b) {
+        return a->zIndex < b->zIndex;
+    });
+};
+
+
 // Renders tiles onto the screen
-void RenderTiles(std::vector<Tile*> *array) {
-    for (int i = 0; i < array->size(); i++) {
-        DrawTexture(array->at(i)->tileImage, array->at(i)->position.x, array->at(i)->position.y, WHITE);
+void RenderTiles(std::vector<Tile*>& array) {
+    for (int i = 0; i < array.size(); i++) {
+        if (array.at(i)->visible == false) {
+            continue;
+        };
+        unsigned char alpha = (unsigned char)(array.at(i)->opacity);
+        DrawTexture(array.at(i)->image, array.at(i)->position.x, array.at(i)->position.y, (Color){255, 255, 255, alpha});
+    };
+};
+
+void RenderUI(std::vector<UIObject*>& array) {
+    for (int i = 0; i < array.size(); i++) {
+        if (array.at(i)->visible == false) {
+            continue;
+        };
+        unsigned char alpha = (unsigned char)(array.at(i)->opacity);
+        DrawTexture(array.at(i)->image, array.at(i)->position.x, array.at(i)->position.y, (Color){255, 255, 255, alpha});
     };
 };
 
 // This adds a the tile struct to the array. The tile struct contains the texture, position, and zIndex, will probably add more later.
 void AddTexture(std::vector<Tile> *array, Texture texture, Vector2 position, int zIndex) {
     Tile newTile;
-    newTile.tileImage = texture;
+    newTile.image = texture;
     newTile.position = position;
     newTile.zIndex = zIndex;
     array->push_back(newTile);
 };
 
 // Frees all the textures inside of the tiles inside of the array, then clears the array. Used when the player leaves.
-void FreeAllTextures(std::vector<Tile> *array) {
-    for (int i = 0; i < array->size(); i++) {
-        UnloadTexture(array->at(i).tileImage);
+void FreeAllTextures() {
+    for (auto& texture: textures) {
+        UnloadTexture(texture->texture);
+        delete texture;
     };
-    array->clear();
+    textures.clear();
+    for (std::unordered_map<int, Tile*>::iterator it = tiles.begin(); it != tiles.end(); ++it) {
+        delete it->second; // Free the memory
+    };
+    for (auto& i: tilesToRender) {
+        delete i;
+    };
+    for (std::unordered_map<int, UIObject*>::iterator it = ui.begin(); it != ui.end(); ++it) {
+        delete it->second; // Free the memory
+    };
+    for (auto& i: uiToRender) {
+        delete i;
+    };
+    tilesToRender.clear();
+    tiles.clear();
 };
 
 

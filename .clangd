@@ -1,5 +1,5 @@
 CompileFlags:
-  Add: [-IC:/raylib/raylib/include, -IC:/raylib/raylib/src, -IC:/msys64/mingw64/include/c++/13.1.0, -IC:/msys64/mingw64/include/c++/13.1.0/x86_64-w64-mingw32]
+  Add: [-IC:/raylib/raylib/include, -IC:/raylib/raylib/src, -IC:/msys64/mingw64/include/c++/13.1.0, -IC:/msys64/mingw64/include/c++/13.1.0/x86_64-w64-mingw32, -IC:/msys64/mingw64/include]
 Completion:
   AllScopes: true
 Diagnostics:

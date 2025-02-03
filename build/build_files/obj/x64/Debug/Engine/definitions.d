@@ -64,6 +64,14 @@ obj/x64/Debug/Engine/definitions.o: ../../src/definitions.cpp \
  C:/msys64/mingw64/include/c++/13.1.0/tuple \
  ../../src/../include/types.hpp ../../src/../include/MM.hpp \
  ../../src/../include/dataStructures.hpp \
+ C:/msys64/mingw64/include/c++/13.1.0/unordered_map \
+ C:/msys64/mingw64/include/c++/13.1.0/bits/unordered_map.h \
+ C:/msys64/mingw64/include/c++/13.1.0/bits/hashtable.h \
+ C:/msys64/mingw64/include/c++/13.1.0/bits/hashtable_policy.h \
+ C:/msys64/mingw64/include/c++/13.1.0/ext/aligned_buffer.h \
+ C:/msys64/mingw64/include/c++/13.1.0/bits/enable_special_members.h \
+ C:/msys64/mingw64/include/c++/13.1.0/bits/node_handle.h \
+ C:/msys64/mingw64/include/c++/13.1.0/bits/erase_if.h \
  C:/msys64/mingw64/include/c++/13.1.0/algorithm \
  C:/msys64/mingw64/include/c++/13.1.0/bits/stl_algo.h \
  C:/msys64/mingw64/include/c++/13.1.0/bits/algorithmfwd.h \
@@ -84,11 +92,15 @@ obj/x64/Debug/Engine/definitions.o: ../../src/definitions.cpp \
  C:/msys64/mingw64/include/c++/13.1.0/bits/std_abs.h \
  C:/msys64/mingw64/include/c++/13.1.0/pstl/glue_algorithm_defs.h \
  C:/msys64/mingw64/include/c++/13.1.0/pstl/execution_defs.h \
- C:/Users/krist/OneDrive/Desktop/Engine/include2/lua.hpp \
- C:/Users/krist/OneDrive/Desktop/Engine/include2/lua.h \
- C:/Users/krist/OneDrive/Desktop/Engine/include2/luaconf.h \
- C:/Users/krist/OneDrive/Desktop/Engine/include2/lualib.h \
- C:/Users/krist/OneDrive/Desktop/Engine/include2/lauxlib.h \
+ C:/msys64/mingw64/include/c++/13.1.0/cstring \
+ C:/msys64/mingw64/include/string.h \
+ C:/msys64/mingw64/include/sec_api/string_s.h \
+ ../../src/../include/lua_manager.hpp \
+ ../../src/../include/../include2/lua.hpp \
+ ../../src/../include/../include2/lua.h \
+ ../../src/../include/../include2/luaconf.h \
+ ../../src/../include/../include2/lualib.h \
+ ../../src/../include/../include2/lauxlib.h \
  C:/msys64/mingw64/include/stdio.h \
  C:/msys64/mingw64/include/corecrt_stdio_config.h \
  C:/msys64/mingw64/include/_mingw_off_t.h \
@@ -162,6 +174,14 @@ C:/msys64/mingw64/include/c++/13.1.0/tuple:
 ../../src/../include/types.hpp:
 ../../src/../include/MM.hpp:
 ../../src/../include/dataStructures.hpp:
+C:/msys64/mingw64/include/c++/13.1.0/unordered_map:
+C:/msys64/mingw64/include/c++/13.1.0/bits/unordered_map.h:
+C:/msys64/mingw64/include/c++/13.1.0/bits/hashtable.h:
+C:/msys64/mingw64/include/c++/13.1.0/bits/hashtable_policy.h:
+C:/msys64/mingw64/include/c++/13.1.0/ext/aligned_buffer.h:
+C:/msys64/mingw64/include/c++/13.1.0/bits/enable_special_members.h:
+C:/msys64/mingw64/include/c++/13.1.0/bits/node_handle.h:
+C:/msys64/mingw64/include/c++/13.1.0/bits/erase_if.h:
 C:/msys64/mingw64/include/c++/13.1.0/algorithm:
 C:/msys64/mingw64/include/c++/13.1.0/bits/stl_algo.h:
 C:/msys64/mingw64/include/c++/13.1.0/bits/algorithmfwd.h:
@@ -182,11 +202,15 @@ C:/msys64/mingw64/include/errno.h:
 C:/msys64/mingw64/include/c++/13.1.0/bits/std_abs.h:
 C:/msys64/mingw64/include/c++/13.1.0/pstl/glue_algorithm_defs.h:
 C:/msys64/mingw64/include/c++/13.1.0/pstl/execution_defs.h:
-C:/Users/krist/OneDrive/Desktop/Engine/include2/lua.hpp:
-C:/Users/krist/OneDrive/Desktop/Engine/include2/lua.h:
-C:/Users/krist/OneDrive/Desktop/Engine/include2/luaconf.h:
-C:/Users/krist/OneDrive/Desktop/Engine/include2/lualib.h:
-C:/Users/krist/OneDrive/Desktop/Engine/include2/lauxlib.h:
+C:/msys64/mingw64/include/c++/13.1.0/cstring:
+C:/msys64/mingw64/include/string.h:
+C:/msys64/mingw64/include/sec_api/string_s.h:
+../../src/../include/lua_manager.hpp:
+../../src/../include/../include2/lua.hpp:
+../../src/../include/../include2/lua.h:
+../../src/../include/../include2/luaconf.h:
+../../src/../include/../include2/lualib.h:
+../../src/../include/../include2/lauxlib.h:
 C:/msys64/mingw64/include/stdio.h:
 C:/msys64/mingw64/include/corecrt_stdio_config.h:
 C:/msys64/mingw64/include/_mingw_off_t.h:

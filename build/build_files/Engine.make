@@ -185,8 +185,10 @@ GENERATED :=
 OBJECTS :=
 
 GENERATED += $(OBJDIR)/definitions.o
+GENERATED += $(OBJDIR)/lua_manager.o
 GENERATED += $(OBJDIR)/main.o
 OBJECTS += $(OBJDIR)/definitions.o
+OBJECTS += $(OBJDIR)/lua_manager.o
 OBJECTS += $(OBJDIR)/main.o
 
 # Rules
@@ -252,6 +254,9 @@ endif
 # #############################################
 
 $(OBJDIR)/definitions.o: ../../src/definitions.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/lua_manager.o: ../../src/lua_manager.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/main.o: ../../src/main.cpp
