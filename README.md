@@ -19,3 +19,21 @@ This is a project I created using raylib, c++ and lua. It is not intended for pr
 * deleteUI(uiID) - Exactly the same function as "deleteObject()" but for the UI.
 
 * clearAllUI() - Exactly the same function as "clearObjects()" but for the UI.
+
+## Globals:
+
+Currently there is only one global that is useable, "player".
+
+The player global has the properties of: x, y, zIndex, image, and opacity.
+
+## Plans for the future:
+
+* Clean everything up to make it look nicer.
+
+* Add more control for lua.
+
+* Map editor/creator
+
+* 2D rigging for sprites.
+
+* Shader Support
