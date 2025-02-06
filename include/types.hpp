@@ -32,6 +32,13 @@ typedef struct TextureType {
     const char* filePath;
 } TextureType;
 
+typedef struct Padding {
+    int top;
+    int left;
+    int right;
+    int bottom;
+} Padding;
+
 typedef struct UIObject {
     Vector2 position;
     Texture2D image;
@@ -45,6 +52,7 @@ typedef struct UIObject {
     Color fontColor;
     float offsetWidth;
     float offsetHeight;
+    Padding padding;
     const char * textAlignX;
     const char * textAlignY;
     int opacity;

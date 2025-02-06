@@ -232,8 +232,6 @@ int registerNewUI(lua_State* L) {
     newUI->fontSize = 32;
     newUI->fontColor = (Color) {255, 255, 255, 255};
     newUI->text = "";
-    newUI->height = 64;
-    newUI->width = 64;
 
     ui.emplace(uiid, newUI);
     uiToRender.push_back(newUI);
@@ -490,6 +488,26 @@ int uiGetField(lua_State* L) {
     } else if (strcmp(field, "textAlignY") == 0) {
         lua_pushstring(L, it->second->textAlignY);
         return 1;
+    } else if (strcmp(field, "padding") == 0) {
+        lua_newtable(L);
+
+        lua_pushstring(L, "top");
+        lua_pushnumber(L, it->second->padding.top);
+        lua_settable(L, -3);
+
+        lua_pushstring(L, "left");
+        lua_pushnumber(L, it->second->padding.left);
+        lua_settable(L, -3); 
+
+        lua_pushstring(L, "right");
+        lua_pushnumber(L, it->second->padding.right);
+        lua_settable(L, -3);
+
+        lua_pushstring(L, "bottom");
+        lua_pushnumber(L, it->second->padding.bottom);
+        lua_settable(L, -3);
+        lua_pop(L, 1);
+        return 1;
     };
     return luaL_error(L, "Unknown field: %s", field);
 };
@@ -517,6 +535,8 @@ int uiSetField(lua_State* L) {
         return 0;
     } else if (strcmp(field, "image") == 0) {
         uiTile->image = loadSTexture(luaL_checkstring(L, 3));
+        uiTile->width = uiTile->image.width;
+        uiTile->height = uiTile->image.height;
         return 0;
     } else if (strcmp(field, "zIndex") == 0) {
         uiTile->zIndex = luaL_checknumber(L, 3);
@@ -578,10 +598,33 @@ int uiSetField(lua_State* L) {
         if (strcmp(uiTile->textAlignY, "center") == 0) {
             uiTile->offsetHeight = 0.0f;
         } else if (strcmp(uiTile->textAlignY, "up") == 0) {
-            uiTile->offsetHeight = uiTile->height/2.0f;
+            uiTile->offsetHeight = -uiTile->height/2.0f;
         } else {
             uiTile->offsetHeight = uiTile->height/2.0f;
         };
+        return 0;
+    } else if (strcmp(field, "padding") == 0) {
+        lua_pushstring(L, "top");
+        lua_gettable(L, 3);
+        uiTile->padding.top = lua_tonumber(L, -1);
+        uiTile->padding.top = -uiTile->padding.top;
+        lua_pop(L, 1);
+
+        lua_pushstring(L, "left");
+        lua_gettable(L, 3);
+        uiTile->padding.left = lua_tonumber(L, -1);
+        lua_pop(L, 1);
+
+        lua_pushstring(L, "right");
+        lua_gettable(L, 3);
+        uiTile->padding.right = lua_tonumber(L, -1);
+        uiTile->padding.right = -uiTile->padding.right;
+        lua_pop(L, 1);
+
+        lua_pushstring(L, "bottom");
+        lua_gettable(L, 3);
+        uiTile->padding.bottom = lua_tonumber(L, -1);
+        lua_pop(L, 1);
         return 0;
     };
     return luaL_error(L, "Unknown field: %s", field);

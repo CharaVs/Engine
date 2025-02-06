@@ -18,7 +18,7 @@ This is a project I created using raylib, c++ and lua. It is not intended for pr
 
 * ui() - Creates a similar object to "object()" but it is ALWAYS drawn on top of the objects, no matter the zIndex.
 
-* UI Object properties: x (int), y (int), image (path), zIndex (int), visible (bool), opacity (int), id (int), width (float), height (float), rotation (float), text (string), fontSize (int), fontColor (Color), textAlignX (string)('center', 'left', 'right'), textAlignY (string)('center', 'down', 'up').
+* UI Object properties: x (int), y (int), image (path), zIndex (int), visible (bool), opacity (int), id (int), width (float), height (float), rotation (float), text (string), fontSize (int), fontColor (Color), textAlignX (string)('center', 'left', 'right'), textAlignY (string)('center', 'down', 'up'), padding (Padding)(Example usage: uiObject.padding = {top = 20, bottom = 0, left = 2, right = 5}).
 
 * deleteUI(uiID) - Exactly the same function as "deleteObject()" but for the UI.
 

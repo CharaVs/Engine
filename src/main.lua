@@ -28,9 +28,10 @@ local function MainMenu()
         undertaleButton.image = "resources/undertaleButton.png"
         undertaleButton.width = 256
         undertaleButton.height = 256
-        undertaleButton.fontSize = 64
-        undertaleButton.textAlignX = "center"
-        undertaleButton.textAlignY = "center"
+        undertaleButton.fontSize = 32
+        undertaleButton.textAlignX = "left"
+        undertaleButton.padding = {top = 0, right = 0, left = 4, bottom = 0}
+        undertaleButton.textAlignY = "up"
         undertaleButton.x = 0
         undertaleButton.y = 0
         table.insert(mainMenuButtons, undertaleButton)

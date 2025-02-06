@@ -148,8 +148,8 @@ void RenderUI(std::vector<UIObject*>& array) {
 
             // Adjust the position to the center of the UI object.
             Vector2 textPos = {
-                array.at(i)->position.x - array.at(i)->offsetWidth,
-                array.at(i)->position.y + array.at(i)->offsetHeight
+                array.at(i)->position.x - array.at(i)->offsetWidth + (array.at(i)->padding.left + array.at(i)->padding.right),
+                array.at(i)->position.y + array.at(i)->offsetHeight + (array.at(i)->padding.top + array.at(i)->padding.bottom)
             };
             DrawTextPro(fontToUse, array.at(i)->text, textPos, textOrigin, array.at(i)->rotation, array.at(i)->fontSize, 0, array.at(i)->fontColor);
         }
