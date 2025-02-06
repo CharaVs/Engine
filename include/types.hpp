@@ -43,10 +43,10 @@ typedef struct UIObject {
     const char * text;
     int fontSize;
     Color fontColor;
-    int baseWidth;
-    int baseHeight;
-    int widthCO;
-    int heightCO;
+    float offsetWidth;
+    float offsetHeight;
+    const char * textAlignX;
+    const char * textAlignY;
     int opacity;
     int id;
 } UIObject;

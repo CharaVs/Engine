@@ -229,7 +229,7 @@ int registerNewUI(lua_State* L) {
     newUI->id = uiid;
     newUI->opacity = 255;
     newUI->visible = true;
-    newUI->fontSize = 64;
+    newUI->fontSize = 32;
     newUI->fontColor = (Color) {255, 255, 255, 255};
     newUI->text = "";
     newUI->height = 64;
@@ -484,8 +484,11 @@ int uiGetField(lua_State* L) {
         lua_settable(L, -3);
         
         return 1;
-    } else if (strcmp(field, "widthCO") == 0) {
-        lua_pushnumber(L, it->second->widthCO);
+    } else if (strcmp(field, "textAlignX") == 0) {
+        lua_pushstring(L, it->second->textAlignX);
+        return 1;
+    } else if (strcmp(field, "textAlignY") == 0) {
+        lua_pushstring(L, it->second->textAlignY);
         return 1;
     };
     return luaL_error(L, "Unknown field: %s", field);
@@ -514,8 +517,6 @@ int uiSetField(lua_State* L) {
         return 0;
     } else if (strcmp(field, "image") == 0) {
         uiTile->image = loadSTexture(luaL_checkstring(L, 3));
-        uiTile->baseWidth = uiTile->image.width/4;
-        uiTile->baseHeight = uiTile->image.height/4;
         return 0;
     } else if (strcmp(field, "zIndex") == 0) {
         uiTile->zIndex = luaL_checknumber(L, 3);
@@ -528,15 +529,9 @@ int uiSetField(lua_State* L) {
         return 0;
     } else if (strcmp(field, "width") == 0) {
         uiTile->width = luaL_checknumber(L, 3);
-        uiTile->widthCO = uiTile->width/2;
         return 0;
     } else if (strcmp(field, "height") == 0) {
         uiTile->height = luaL_checknumber(L, 3);
-        if (uiTile->height != uiTile->baseHeight*4) {
-            uiTile->heightCO = uiTile->height/4;
-        } else {
-            uiTile->heightCO = 0;
-        };
         return 0;
     } else if (strcmp(field, "rotation") == 0) {
         uiTile->rotation = luaL_checknumber(L, 3);
@@ -567,6 +562,26 @@ int uiSetField(lua_State* L) {
         lua_gettable(L, 3);
         uiTile->fontColor.a = lua_tonumber(L, -1);
         lua_pop(L, 1);
+        return 0;
+    } else if (strcmp(field, "textAlignX") == 0) {
+        uiTile->textAlignX = lua_tostring(L, 3);
+        if (strcmp(uiTile->textAlignX, "center") == 0) {
+            uiTile->offsetWidth = 0.0f;
+        } else if (strcmp(uiTile->textAlignX, "left") == 0) {
+            uiTile->offsetWidth = uiTile->width/2.0f;
+        } else if (strcmp(uiTile->textAlignX, "right") == 0) {
+            uiTile->offsetWidth = -uiTile->width/2.0f;
+        };
+        return 0;
+    } else if (strcmp(field, "textAlignY") == 0) {
+        uiTile->textAlignY = lua_tostring(L, 3);
+        if (strcmp(uiTile->textAlignY, "center") == 0) {
+            uiTile->offsetHeight = 0.0f;
+        } else if (strcmp(uiTile->textAlignY, "up") == 0) {
+            uiTile->offsetHeight = uiTile->height/2.0f;
+        } else {
+            uiTile->offsetHeight = uiTile->height/2.0f;
+        };
         return 0;
     };
     return luaL_error(L, "Unknown field: %s", field);

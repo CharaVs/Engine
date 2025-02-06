@@ -26,9 +26,11 @@ local function MainMenu()
         -- Create all the required objects here
         local undertaleButton = ui()
         undertaleButton.image = "resources/undertaleButton.png"
-        undertaleButton.width = 128;
-        print(undertaleButton.widthCO)
-        undertaleButton.height = 128;
+        undertaleButton.width = 256
+        undertaleButton.height = 256
+        undertaleButton.fontSize = 64
+        undertaleButton.textAlignX = "center"
+        undertaleButton.textAlignY = "center"
         undertaleButton.x = 0
         undertaleButton.y = 0
         table.insert(mainMenuButtons, undertaleButton)
@@ -38,14 +40,12 @@ local function MainMenu()
     local undertaleButton = mainMenuButtons[1]
     local currentButton = mainMenuButtons[2]
     undertaleButton.fontColor = {r = 0, g = 255, b = 0, a = 255}
-    undertaleButton.text = "H"
+    undertaleButton.text = "Done"
     if IsKeyDown("KEY_W") then
         undertaleButton.width = undertaleButton.width + 2
-        print(undertaleButton.widthCO)
     end
     if IsKeyDown("KEY_S") then
         undertaleButton.width = undertaleButton.width - 2
-        print(undertaleButton.widthCO)
     end
 end
 scenes["MainScene"] = MainMenu

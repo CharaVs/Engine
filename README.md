@@ -8,13 +8,17 @@ This is a project I created using raylib, c++ and lua. It is not intended for pr
 
 * IsKeyPressed(key) - Checks if the key has been pressed.
 
-* object() - Creates a new object with the properties: x, y, image (path), zIndex, visible (bool), opacity, id, width, height, and rotation.
+* object() - Creates a new object
+
+* Object properties:  x (int), y (int), image (path), zIndex (int), visible (bool), opacity (int), id (int), width (float), height (float), rotation (float).
 
 * deleteObject(objectID) - Destroys the object using the object id. For example: deleteObject(object.id)
 
 * clearObjects() - Clears all the objects that have been created.
 
-* ui() - Creates a similar object to "object()", and has the same properties (with the addition of text, fontSize, and font color), but it is ALWAYS drawn on top of the objects, no matter the zIndex.
+* ui() - Creates a similar object to "object()" but it is ALWAYS drawn on top of the objects, no matter the zIndex.
+
+* UI Object properties: x (int), y (int), image (path), zIndex (int), visible (bool), opacity (int), id (int), width (float), height (float), rotation (float), text (string), fontSize (int), fontColor (Color), textAlignX (string)('center', 'left', 'right'), textAlignY (string)('center', 'down', 'up').
 
 * deleteUI(uiID) - Exactly the same function as "deleteObject()" but for the UI.
 
