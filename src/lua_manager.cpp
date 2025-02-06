@@ -229,6 +229,11 @@ int registerNewUI(lua_State* L) {
     newUI->id = uiid;
     newUI->opacity = 255;
     newUI->visible = true;
+    newUI->fontSize = 64;
+    newUI->fontColor = (Color) {255, 255, 255, 255};
+    newUI->text = "";
+    newUI->height = 64;
+    newUI->width = 64;
 
     ui.emplace(uiid, newUI);
     uiToRender.push_back(newUI);
@@ -268,6 +273,15 @@ int playerGetField(lua_State* L) {
     } else if (strcmp(field, "opacity") == 0) {
         lua_pushinteger(L, player->opacity);
         return 1;
+    } else if (strcmp(field, "width") == 0) {
+        lua_pushnumber(L, player->width);
+        return 1;
+    } else if (strcmp(field, "height") == 0) {
+        lua_pushnumber(L, player->height);
+        return 1;
+    } else if (strcmp(field, "rotation") == 0) {
+        lua_pushnumber(L, player->rotation);
+        return 1;
     };
 
     return 1;
@@ -286,6 +300,15 @@ int playerSetField(lua_State* L) {
         player->image = loadSTexture(luaL_checkstring(L, 3));
     } else if (strcmp(field, "opacity") == 0) {
         player->opacity = luaL_checkinteger(L, 3);
+        return 1;
+    } else if (strcmp(field, "width") == 0) {
+        player->width = luaL_checknumber(L, 3);
+        return 1;
+    } else if (strcmp(field, "height") == 0) {
+        player->height = luaL_checknumber(L, 3);
+        return 1;
+    } else if (strcmp(field, "rotation") == 0) {
+        player->rotation = luaL_checknumber(L, 3);
         return 1;
     };
 
@@ -330,6 +353,15 @@ int objectGetField(lua_State* L) {
     } else if (strcmp(field, "opacity") == 0) {
         lua_pushinteger(L, it->second->opacity);
         return 1;
+    } else if (strcmp(field, "width") == 0) {
+        lua_pushnumber(L, it->second->width);
+        return 1;
+    } else if (strcmp(field, "height") == 0) {
+        lua_pushnumber(L, it->second->height);
+        return 1;
+    } else if (strcmp(field, "rotation") == 0) {
+        lua_pushnumber(L, it->second->rotation);
+        return 1;
     };
     return luaL_error(L, "Unknown field: %s", field);
 };
@@ -367,6 +399,15 @@ int objectSetField(lua_State* L) {
         return 0;
     } else if (strcmp(field, "opacity") == 0) {
         tile->opacity = luaL_checkinteger(L, 3);
+        return 1;
+    } else if (strcmp(field, "width") == 0) {
+        tile->width = luaL_checknumber(L, 3);
+        return 1;
+    } else if (strcmp(field, "height") == 0) {
+        tile->height = luaL_checknumber(L, 3);
+        return 1;
+    } else if (strcmp(field, "rotation") == 0) {
+        tile->rotation = luaL_checknumber(L, 3);
         return 1;
     };
     return luaL_error(L, "Unknown field: %s", field);
@@ -409,6 +450,43 @@ int uiGetField(lua_State* L) {
     } else if (strcmp(field, "opacity") == 0) {
         lua_pushinteger(L, it->second->opacity);
         return 1;
+    } else if (strcmp(field, "width") == 0) {
+        lua_pushnumber(L, it->second->width);
+        return 1;
+    } else if (strcmp(field, "height") == 0) {
+        lua_pushnumber(L, it->second->height);
+        return 1;
+    } else if (strcmp(field, "rotation") == 0) {
+        lua_pushnumber(L, it->second->rotation);
+        return 1;
+    } else if (strcmp(field, "text") == 0) {
+        lua_pushstring(L, it->second->text);
+        return 1;
+    } else if (strcmp(field, "fontSize") == 0) {
+        lua_pushnumber(L, it->second->fontSize);
+        return 1;
+    } else if (strcmp(field, "fontColor") == 0) {
+        lua_newtable(L);
+        lua_pushstring(L, "r");
+        lua_pushnumber(L, it->second->fontColor.r);
+        lua_settable(L, -3);
+
+        lua_pushstring(L, "g");
+        lua_pushnumber(L, it->second->fontColor.g);
+        lua_settable(L, -3); 
+
+        lua_pushstring(L, "b");
+        lua_pushnumber(L, it->second->fontColor.b);
+        lua_settable(L, -3);
+
+        lua_pushstring(L, "a");
+        lua_pushnumber(L, it->second->fontColor.a);
+        lua_settable(L, -3);
+        
+        return 1;
+    } else if (strcmp(field, "widthCO") == 0) {
+        lua_pushnumber(L, it->second->widthCO);
+        return 1;
     };
     return luaL_error(L, "Unknown field: %s", field);
 };
@@ -436,6 +514,8 @@ int uiSetField(lua_State* L) {
         return 0;
     } else if (strcmp(field, "image") == 0) {
         uiTile->image = loadSTexture(luaL_checkstring(L, 3));
+        uiTile->baseWidth = uiTile->image.width/4;
+        uiTile->baseHeight = uiTile->image.height/4;
         return 0;
     } else if (strcmp(field, "zIndex") == 0) {
         uiTile->zIndex = luaL_checknumber(L, 3);
@@ -445,7 +525,49 @@ int uiSetField(lua_State* L) {
         return 0;
     } else if (strcmp(field, "opacity") == 0) {
         uiTile->opacity = luaL_checkinteger(L, 3);
-        return 1;
+        return 0;
+    } else if (strcmp(field, "width") == 0) {
+        uiTile->width = luaL_checknumber(L, 3);
+        uiTile->widthCO = uiTile->width/2;
+        return 0;
+    } else if (strcmp(field, "height") == 0) {
+        uiTile->height = luaL_checknumber(L, 3);
+        if (uiTile->height != uiTile->baseHeight*4) {
+            uiTile->heightCO = uiTile->height/4;
+        } else {
+            uiTile->heightCO = 0;
+        };
+        return 0;
+    } else if (strcmp(field, "rotation") == 0) {
+        uiTile->rotation = luaL_checknumber(L, 3);
+        return 0;
+    } else if (strcmp(field, "text") == 0) {
+        uiTile->text = luaL_checkstring(L, 3);
+        return 0;
+    } else if (strcmp(field, "fontSize") == 0) {
+        uiTile->fontSize = luaL_checknumber(L, 3);
+        return 0;
+    } else if (strcmp(field, "fontColor") == 0) {
+        lua_pushstring(L, "r");
+        lua_gettable(L, 3);
+        uiTile->fontColor.r = lua_tonumber(L, -1);
+        lua_pop(L, 1);
+
+        lua_pushstring(L, "g");
+        lua_gettable(L, 3);
+        uiTile->fontColor.g = lua_tonumber(L, -1);
+        lua_pop(L, 1);
+
+        lua_pushstring(L, "b");
+        lua_gettable(L, 3);
+        uiTile->fontColor.b = lua_tonumber(L, -1);
+        lua_pop(L, 1);
+
+        lua_pushstring(L, "a");
+        lua_gettable(L, 3);
+        uiTile->fontColor.a = lua_tonumber(L, -1);
+        lua_pop(L, 1);
+        return 0;
     };
     return luaL_error(L, "Unknown field: %s", field);
 };

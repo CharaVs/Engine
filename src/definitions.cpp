@@ -15,6 +15,7 @@ std::vector<Tile*> tilesToRender;
 std::unordered_map<int, Tile*> tiles;
 std::vector<UIObject*> uiToRender;
 std::unordered_map<int, UIObject*> ui;
+Font fontToUse;
 
 Texture2D loadSTexture(const char* filePath) {
     for (auto& i : textures) {
@@ -34,6 +35,7 @@ Texture2D loadSTexture(const char* filePath) {
 
 void InitializeGame(int width, int height, const char* title) {
     InitWindow(width, height, title);
+    fontToUse = LoadFont("resources/fonts/romulus.png");
 
     Texture2D wabbit_alpha = loadSTexture("resources/wabbit_alpha.png");
 
@@ -69,6 +71,9 @@ void InitializeGame(int width, int height, const char* title) {
         playerTile->position = player.position;
         playerTile->zIndex = player.zIndex;
         playerTile->opacity = player.opacity;
+        playerTile->width = player.width;
+        playerTile->height = player.height;
+        playerTile->rotation = player.rotation;
         sortZIndexArray(tilesToRender);
         sortZIndexArrayUI(uiToRender);
         //camera.target = player.position;
@@ -106,7 +111,7 @@ void RenderTiles(std::vector<Tile*>& array) {
             continue;
         };
         unsigned char alpha = (unsigned char)(array.at(i)->opacity);
-        DrawTexture(array.at(i)->image, array.at(i)->position.x, array.at(i)->position.y, (Color){255, 255, 255, alpha});
+        DrawTexturePro(array.at(i)->image, {0, 0, 64, 64}, {array.at(i)->position.x, array.at(i)->position.y, array.at(i)->width+64, array.at(i)->height+64}, {32, 32}, array.at(i)->rotation, (Color){255, 255, 255, alpha});
     };
 };
 
@@ -116,7 +121,29 @@ void RenderUI(std::vector<UIObject*>& array) {
             continue;
         };
         unsigned char alpha = (unsigned char)(array.at(i)->opacity);
-        DrawTexture(array.at(i)->image, array.at(i)->position.x, array.at(i)->position.y, (Color){255, 255, 255, alpha});
+        Vector2 origin = { array.at(i)->width, array.at(i)->height};
+
+        DrawTexturePro(array.at(i)->image, 
+        {0, 0, 128, 128}, 
+        {array.at(i)->position.x, array.at(i)->position.y, array.at(i)->width, array.at(i)->height}, 
+        {array.at(i)->width/2,array.at(i)->height/2}, 
+        array.at(i)->rotation, 
+        (Color){255, 255, 255, alpha}
+        );
+        if (strcmp(array.at(i)->text, "") != 0) { 
+            Vector2 textSize = MeasureTextEx(fontToUse, array.at(i)->text, array.at(i)->fontSize, 1.0f);
+
+            // Calculate the origin based on the text's size.
+            Vector2 textOrigin = { textSize.x/2, textSize.y/2};
+
+            // Adjust the position to the center of the UI object.
+            Vector2 textPos = {
+                array.at(i)->position.x,
+                array.at(i)->position.y 
+            };
+
+            DrawTextPro(fontToUse, array.at(i)->text, textPos, textOrigin, array.at(i)->rotation, array.at(i)->fontSize, 1.0f, array.at(i)->fontColor);
+        }
     };
 };
 

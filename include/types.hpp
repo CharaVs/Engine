@@ -7,6 +7,9 @@ typedef struct Player {
     bool canJump;
     float movementSpeed;
     Texture2D image;
+    float width;
+    float height;
+    float rotation;
     int opacity;
     int zIndex;
 } Player;
@@ -15,6 +18,9 @@ typedef struct Player {
 typedef struct Tile {
     Vector2 position;
     Texture2D image;
+    float width;
+    float height;
+    float rotation;
     int zIndex;
     bool visible;
     int opacity;
@@ -31,6 +37,16 @@ typedef struct UIObject {
     Texture2D image;
     int zIndex;
     bool visible;
+    float width;
+    float height;
+    float rotation;
+    const char * text;
+    int fontSize;
+    Color fontColor;
+    int baseWidth;
+    int baseHeight;
+    int widthCO;
+    int heightCO;
     int opacity;
     int id;
 } UIObject;
